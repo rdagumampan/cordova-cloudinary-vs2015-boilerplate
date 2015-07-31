@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>CordovaCloudinaryApp</title>
+
+    <!-- CordovaCloudinaryApp references -->
+    <link href="css/index.css" rel="stylesheet" />
+</head>
+<body>
+    <p>Hello world from Cordova+Cloudinary!</p>
+
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/appBundle.js"></script>
+
+<script>
+    //required cordova plugins
+    //  org.apache.cordova.camera
+    //  org.apache.cordova.file
+    //  org.apache.cordova.filetransfer
+
+    //cloudinary api, replace with your account details
+    var cloudinary_cloudname = 'XXXX';
+    var cloudinary_apikey = 'XXXX';
+    var cloudinary_upload_preset = 'XXXX';
+    var cloudinary_upload_uri = 'https://api.cloudinary.com/v1_1/'+cloudinary_cloudname+'/auto/upload';
+
+    //setup your cloudinary account
+    $.cloudinary.config({ cloud_name: cloudinary_cloudname, api_key: cloudinary_apikey });
+
+    //upload the image into cloudinary account
+    function uploadCloudinary(imageUri) {
+        var options = {
+            params: { 'upload_preset': cloudinary_upload_preset }
+        };
+
+        //will send a REST call to cloudinary api
+        var ft = new FileTransfer();
+        ft.upload(imageUri, encodeURI(cloudinary_upload_uri), uploadCloudinaryOk, uploadCloudinaryNok, options);
+    }
+
+    var uploadCloudinaryOk = function (result) {
+        alert("Yes, it should be there now!");
+    }
+
+    var uploadCloudinaryNok = function (error) {
+        alert("Uuuhh failed! Did you missed to pay your data bill?");
+    }
+
+    //capture photo
+    function capturePhoto() {
+        var options = {
+            quality: 100,
+            destinationType: Camera.DestinationType.FILE_URI,
+            targetHeight: 400,      // i set to lower sizes so i ca save cd space
+            targetWidth: 650,
+            saveToPhotoAlbum: false
+        };
+
+        navigator.camera.getPicture(capturePhotoOk, capturePhotoNok, options);
+    }
+
+    var currentPhotoUri;
+    function uploadPhoto() {
+        uploadCloudinary(currentPhotoUri);
+    }
+
+    function capturePhotoOk(imageUri) {
+        var largeImage = document.getElementById('currentPicture');
+        largeImage.src = imageUri;
+
+        currentPhotoUri = imageUri;
+    }
+
+    function capturePhotoNok(message) {
+        alert('Failed because: ' + message);
+    }
+
+    //pickup photo from cloudinary
+    function pickupPhoto() {
+        var imageUri = $.cloudinary.url('sample.jpg');
+
+        var largeImage = document.getElementById('currentPicture');
+        largeImage.src = imageUri;
+    }
+</script>
+
+    <br />
+    <input type="button" value="Capture Photo" onclick="capturePhoto()" />
+    <br />
+    <input type="button" value="Upload to Cloudinary" onclick="uploadPhoto()" />
+    <br />
+    <input type="button" value="Pick-up from Cloudinary" onclick="pickupPhoto()" />
+    <br />
+    <img id="currentPicture" style="display: block;" />
+    <br />
+
+</body>
+</html>
