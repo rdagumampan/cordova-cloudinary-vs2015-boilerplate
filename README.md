@@ -1,5 +1,5 @@
 # cordova-cloudinary-vs2015-boilerplate
-A super duper simple boilerplate solution for uploading unsigned images into Cloudinary from a Cordova Mobile App.
+A super duper simple boilerplate solution for uploading unsigned images into Cloudinary from a [Cordova](https://cordova.apache.org/) mobile app.
 
 NOTE:
 - Only works on actual device after deployin APK file
