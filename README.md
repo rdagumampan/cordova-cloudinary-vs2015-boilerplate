@@ -12,4 +12,4 @@ Meanwhile you may check out [Cordova File Transfer](http://ngcordova.com/docs/pl
 I hope you find this useful and I will continuously update this as I progress.
 
 yolo,
-@rdagumampan
+[@rdagumampan](https://twitter.com/rdagumampan)
